@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import ChatBar from './ChatBar.jsx';
-import MessageList from './MessageList.jsx';
+import ChatBar from './components/ChatBar.jsx';
+import MessageList from './components/MessageList.jsx';
 
 class App extends Component {
   constructor(props) {
@@ -20,32 +20,9 @@ class App extends Component {
         }
       ]
     };
-    this.onSubmit = this.onSubmit.bind(this);
+    this._addMessage = this._addMessage.bind(this);
   }
 
-  onSubmit = event => {
-    debugger;
-    event.preventDefault();
-    const username = event.target.username;
-    const message = event.target.message;
-    this.props.addMessage(username.value, message.value);
-    message.value = '';
-  };
-  addMessage(username, content) {
-    console.log('Username: ' + username);
-    console.log('Message: ' + content);
-    let newMessage = {
-      username: username,
-      content: content,
-      id: this.state.messages.length + 1
-    };
-    console.log('new task ' + newMessage);
-
-    //saves old tasks, copies into new array
-    let oldContent = this.state.messages;
-    let messages = [...oldContent, newMessage];
-    this.setState({ messages: messages });
-  }
   componentDidMount() {
     console.log('componentDidMount <App />');
     setTimeout(() => {
@@ -68,9 +45,24 @@ class App extends Component {
           </a>
         </nav>
         <MessageList messages={this.state.messages} />
-        <ChatBar currentUser={this.state.currentUser} />
+        <ChatBar currentUser={this.state.currentUser} addMessage={this._addMessage} />
       </div>
     );
+  }
+  _addMessage(username, content) {
+    console.log('Username: ' + username);
+    console.log('Message: ' + content);
+    let newMessage = {
+      username: username,
+      content: content,
+      id: this.state.messages.length + 1
+    };
+    console.log('new task ' + newMessage);
+
+    //saves old tasks, copies into new array
+    let oldContent = this.state.messages;
+    const newContent = [...oldContent, newMessage];
+    this.setState({ messages: newContent });
   }
 }
 export default App;
