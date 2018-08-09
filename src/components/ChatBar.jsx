@@ -4,7 +4,7 @@ class ChatBar extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentUserName: '',
+      currentUserName: this.props.currentUser.name,
       message: ''
     };
     this.handleKeyPress = this.handleKeyPress.bind(this);
