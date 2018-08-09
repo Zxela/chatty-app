@@ -44,17 +44,21 @@ class App extends Component {
     );
   }
   addMessage(username, content) {
-    console.log('Username: ' + username);
-    console.log('Message: ' + content);
-    let newMessage = {
-      type: 'newMessage',
-      content: {
-        username: username,
-        content: content,
-        id: ''
-      }
-    };
-    this.socket.send(JSON.stringify(newMessage));
+    if (!content) {
+      console.log('no content');
+    } else {
+      console.log('Username: ' + username);
+      console.log('Message: ' + content);
+      let newMessage = {
+        type: 'newMessage',
+        content: {
+          username: username,
+          content: content,
+          id: ''
+        }
+      };
+      this.socket.send(JSON.stringify(newMessage));
+    }
   }
   render() {
     return (
@@ -76,7 +80,6 @@ class App extends Component {
   _handleSocketMessage(message) {
     console.log('recieved the following from WebSocketServer:', message.data);
     let messages = [...this.state.messages, JSON.parse(message.data)];
-    console.log(this.state.messages);
     // Update the state of the app component.
     // Calling setState will trigger a call to render() in App and all child components.
     this.setState({ messages }, () => {
