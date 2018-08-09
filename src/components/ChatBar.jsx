@@ -13,7 +13,6 @@ class ChatBar extends Component {
   }
 
   callSetUser(event) {
-    this.props.setUser(event.target.value);
     this.setState({ currentUserName: event.target.value });
   }
   setMessage(event) {
@@ -23,6 +22,7 @@ class ChatBar extends Component {
     if (event.key === 'Enter') {
       event.preventDefault();
       console.log(this.state.message); //log to show message
+      this.props.setUser(this.state.currentUserName);
       this.props.addMessage(this.state.currentUserName, this.state.message);
       this.setState({ message: '' });
     }

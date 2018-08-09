@@ -6,6 +6,7 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      previousUser: { name: '' },
       currentUser: { name: 'nullUser' },
       messages: [] //empty for initialization
     };
@@ -26,23 +27,34 @@ class App extends Component {
     this.socket.onmessage = this._handleSocketMessage;
   }
   setUser(newUser) {
-    this.setState({ currentUser: { name: newUser } }, () => {
-      console.log(this.state.curentUser);
-    });
+    this.setState(
+      { previousUser: { name: this.state.currentUser.name } },
+      () => {
+        this.setState({ currentUser: { name: newUser } }, () => {
+          let userChanged = {
+            type: 'userChanged',
+            content: {
+              previousUser: this.state.previousUser.name,
+              currentUser: newUser
+            }
+          };
+          this.socket.send(JSON.stringify(userChanged));
+        });
+      }
+    );
   }
   addMessage(username, content) {
     console.log('Username: ' + username);
     console.log('Message: ' + content);
     let newMessage = {
-      username: username,
-      content: content,
-      id: ''
+      type: 'newMessage',
+      content: {
+        username: username,
+        content: content,
+        id: ''
+      }
     };
-    //saves old content, copies into new array
-    // let oldContent = this.state.messages;
-    // const newContent = [...oldContent, newMessage];
     this.socket.send(JSON.stringify(newMessage));
-    // this.setState({ messages: newContent });
   }
   render() {
     return (
@@ -62,7 +74,7 @@ class App extends Component {
     );
   }
   _handleSocketMessage(message) {
-    console.log('recieved', message.data);
+    console.log('recieved the following from WebSocketServer:', message.data);
     let messages = [...this.state.messages, JSON.parse(message.data)];
     console.log(this.state.messages);
     // Update the state of the app component.
