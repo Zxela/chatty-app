@@ -6,36 +6,44 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentUser: { name: 'Bob' },
-      messages: [
-        {
-          id: 11231231212,
-          username: 'Bob',
-          content: 'Has anyone seen my marbles?'
-        },
-        {
-          id: 12412412512,
-          username: 'Anonymous',
-          content: 'No, I think you lost them. You lost your marbles Bob. You lost them for good.'
-        }
-      ]
+      currentUser: { name: 'nullUser' },
+      messages: [] //empty for initialization
     };
-    this._addMessage = this._addMessage.bind(this);
+    this.addMessage = this.addMessage.bind(this);
+    this._handleSocketMessage = this._handleSocketMessage.bind(this);
+    this.setUser = this.setUser.bind(this);
   }
 
   componentDidMount() {
     console.log('componentDidMount <App />');
-    setTimeout(() => {
-      console.log('Simulating incoming message');
-      // Add a new message to the list of messages in the data store
-      const newMessage = { id: 3, username: 'Michelle', content: 'Hello there!' };
-      const messages = this.state.messages.concat(newMessage);
-      // Update the state of the app component.
-      // Calling setState will trigger a call to render() in App and all child components.
-      this.setState({ messages: messages });
-    }, 3000);
-  }
 
+    // Setup WebSocket Client
+    this.socket = new WebSocket('ws://localhost:3001');
+    // Add Event Listener for Open Connection
+    this.socket.addEventListener('open', event => {
+      console.log('connection opened with websocket server');
+    });
+    this.socket.onmessage = this._handleSocketMessage;
+  }
+  setUser(newUser) {
+    this.setState({ currentUser: { name: newUser } }, () => {
+      console.log(this.state.curentUser);
+    });
+  }
+  addMessage(username, content) {
+    console.log('Username: ' + username);
+    console.log('Message: ' + content);
+    let newMessage = {
+      username: username,
+      content: content,
+      id: ''
+    };
+    //saves old content, copies into new array
+    // let oldContent = this.state.messages;
+    // const newContent = [...oldContent, newMessage];
+    this.socket.send(JSON.stringify(newMessage));
+    // this.setState({ messages: newContent });
+  }
   render() {
     return (
       <div>
@@ -45,24 +53,23 @@ class App extends Component {
           </a>
         </nav>
         <MessageList messages={this.state.messages} />
-        <ChatBar currentUser={this.state.currentUser} addMessage={this._addMessage} />
+        <ChatBar
+          currentUser={this.state.currentUser}
+          addMessage={this.addMessage}
+          setUser={this.setUser}
+        />
       </div>
     );
   }
-  _addMessage(username, content) {
-    console.log('Username: ' + username);
-    console.log('Message: ' + content);
-    let newMessage = {
-      username: username,
-      content: content,
-      id: this.state.messages.length + 1
-    };
-    console.log('new task ' + newMessage);
-
-    //saves old tasks, copies into new array
-    let oldContent = this.state.messages;
-    const newContent = [...oldContent, newMessage];
-    this.setState({ messages: newContent });
+  _handleSocketMessage(message) {
+    console.log('recieved', message.data);
+    let messages = [...this.state.messages, JSON.parse(message.data)];
+    console.log(this.state.messages);
+    // Update the state of the app component.
+    // Calling setState will trigger a call to render() in App and all child components.
+    this.setState({ messages }, () => {
+      console.log(this.state.messages);
+    });
   }
 }
 export default App;

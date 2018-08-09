@@ -3,24 +3,51 @@ import React, { Component } from 'react';
 class ChatBar extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      currentUserName: '',
+      message: ''
+    };
     this.handleKeyPress = this.handleKeyPress.bind(this);
+    this.setMessage = this.setMessage.bind(this);
+    this.callSetUser = this.callSetUser.bind(this);
   }
-  handleKeyPress = event => {
+
+  callSetUser(event) {
+    this.props.setUser(event.target.value);
+    this.setState({ currentUserName: event.target.value });
+  }
+  setMessage(event) {
+    this.setState({ message: event.target.value });
+  }
+  handleKeyPress(event) {
     if (event.key === 'Enter') {
       event.preventDefault();
-      console.log(event.target.closest('form').children);
-      const username = event.target.closest('form').children[0];
-      const message = event.target.closest('form').children[1];
-      this.props.addMessage(username.value, message.value);
-      message.value = '';
+      console.log(this.state.message); //log to show message
+      this.props.addMessage(this.state.currentUserName, this.state.message);
+      this.setState({ message: '' });
     }
-  };
+  }
+
   render() {
     return (
       <footer>
         <form onKeyPress={this.handleKeyPress} className="chatbar">
-          <input id="chatbar-username" name="username" className="chatbar-username" defaultValue={this.props.currentUser.name} />
-          <input id="chatbar-message" name="message" className="chatbar-message" placeholder="placeholder" defaultValue="" />
+          <input
+            id="chatbar-username"
+            name="username"
+            className="chatbar-username"
+            onChange={this.callSetUser}
+            value={this.state.currentUserName}
+            placeholder="Username"
+          />
+          <input
+            id="chatbar-message"
+            name="message"
+            className="chatbar-message"
+            placeholder="placeholder"
+            onChange={this.setMessage}
+            value={this.state.message}
+          />
         </form>
       </footer>
     );
