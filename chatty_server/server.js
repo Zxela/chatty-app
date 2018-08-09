@@ -5,7 +5,7 @@ const uuidv4 = require('uuid/v4');
 // Set the port to 3001
 const PORT = 3001;
 
-//
+// Empty array to store messages
 const messages = [];
 
 // Create a new express server
