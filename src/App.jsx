@@ -7,7 +7,7 @@ class App extends Component {
     super(props);
     this.state = {
       previousUser: { name: '' },
-      currentUser: { name: 'nullUser' },
+      currentUser: { name: 'Default' },
       messages: [] //empty for initialization
     };
     this.addMessage = this.addMessage.bind(this);

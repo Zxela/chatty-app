@@ -6,13 +6,7 @@ const uuidv4 = require('uuid/v4');
 const PORT = 3001;
 
 //
-const messages = [
-  {
-    username: 'Admin',
-    content: 'there is currently no content',
-    id: 1
-  }
-];
+const messages = [];
 
 // Create a new express server
 const server = express()
