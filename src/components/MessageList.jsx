@@ -16,9 +16,9 @@ class MessageList extends Component {
         );
       } else {
         return (
-          <div className="message" key={index}>
+          <div class="notification">
             <span
-              className="message-content"
+              class="notification-content"
               style={{ color: 'red', fontSize: '200%' }}
             >
               {message.content}

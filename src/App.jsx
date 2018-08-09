@@ -8,17 +8,16 @@ class App extends Component {
     this.state = {
       previousUser: { name: '' },
       currentUser: { name: 'Default' },
-      messages: []
+      messages: [],
+      numOfUsers: 0
     };
     this.addMessage = this.addMessage.bind(this);
     this._handleSocketMessage = this._handleSocketMessage.bind(this);
     this.setUser = this.setUser.bind(this);
   }
-
   componentDidMount() {
-    console.log('componentDidMount <App />');
-
     // Setup WebSocket Client
+    console.log('componentDidMount <App />');
     this.socket = new WebSocket('ws://localhost:3001');
     // Add Event Listener for Open Connection
     this.socket.addEventListener('open', event => {
@@ -60,6 +59,8 @@ class App extends Component {
       this.socket.send(JSON.stringify(newMessage));
     }
   }
+
+  // RENDER STARTS HERE
   render() {
     return (
       <div>
@@ -67,6 +68,9 @@ class App extends Component {
           <a href="/" className="navbar-brand">
             Chatty
           </a>
+          <div className="userCount">
+            Number of users logged-in: {this.state.numOfUsers}
+          </div>
         </nav>
         <MessageList messages={this.state.messages} />
         <ChatBar
@@ -77,6 +81,8 @@ class App extends Component {
       </div>
     );
   }
+  // RENDER ENDS HERE
+
   _handleSocketMessage(message) {
     let messageData = JSON.parse(message.data);
     console.log(messageData);
@@ -107,6 +113,9 @@ class App extends Component {
         this.setState({ messages: userMessages }, () => {
           console.log(this.state.messages);
         });
+        break;
+      case 'numUsers':
+        this.setState({ numOfUsers: messageData.content });
         break;
       default:
         console.log(`invalid message type ${message}`);
