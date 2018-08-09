@@ -7,12 +7,25 @@ class MessageList extends Component {
 
   renderMessage = () => {
     return this.props.messages.map((message, index) => {
-      return (
-        <div className="message" key={index}>
-          <span className="message-username">{message.username}</span>
-          <span className="message-content">{message.content}</span>
-        </div>
-      );
+      if (message.type === 'newMessage') {
+        return (
+          <div className="message" key={index}>
+            <span className="message-username">{message.username}</span>
+            <span className="message-content">{message.content}</span>
+          </div>
+        );
+      } else {
+        return (
+          <div className="message" key={index}>
+            <span
+              className="message-content"
+              style={{ color: 'red', fontSize: '200%' }}
+            >
+              {message.content}
+            </span>
+          </div>
+        );
+      }
     });
   };
 

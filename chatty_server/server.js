@@ -35,21 +35,26 @@ wss.on('connection', ws => {
   });
 
   ws.on('message', data => {
+    console.log(`Data recieved from app = ${data}`);
     newData = JSON.parse(data);
     switch (newData.type) {
       // If data type is a new message
       case 'newMessage':
         let incMessage = newData.content;
         incMessage.id = uuidv4();
+        incMessage.type = 'newMessage';
         messages.push(incMessage);
         wss.broadcast(JSON.stringify(incMessage));
         break;
       case 'userChanged':
         let currentUser = newData.content.currentUser;
         let previousUser = newData.content.previousUser;
-        console.log(
-          `Previous User:${previousUser} || Current User:${currentUser}`
-        );
+        let userChanged = {
+          type: 'userChanged',
+          previousUser: previousUser,
+          newUser: currentUser
+        };
+        wss.broadcast(JSON.stringify(userChanged));
         break;
       // DEFAULT CASE - To catch edge cases
       default:

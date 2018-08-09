@@ -8,7 +8,7 @@ class App extends Component {
     this.state = {
       previousUser: { name: '' },
       currentUser: { name: 'Default' },
-      messages: [] //empty for initialization
+      messages: []
     };
     this.addMessage = this.addMessage.bind(this);
     this._handleSocketMessage = this._handleSocketMessage.bind(this);
@@ -35,10 +35,11 @@ class App extends Component {
             type: 'userChanged',
             content: {
               previousUser: this.state.previousUser.name,
-              currentUser: newUser
+              currentUser: newUser || this.state.previousUser.name
             }
           };
-          this.socket.send(JSON.stringify(userChanged));
+          if (this.state.previousUser.name !== newUser)
+            this.socket.send(JSON.stringify(userChanged));
         });
       }
     );
@@ -53,8 +54,7 @@ class App extends Component {
         type: 'newMessage',
         content: {
           username: username,
-          content: content,
-          id: ''
+          content: content
         }
       };
       this.socket.send(JSON.stringify(newMessage));
@@ -78,13 +78,39 @@ class App extends Component {
     );
   }
   _handleSocketMessage(message) {
-    console.log('recieved the following from WebSocketServer:', message.data);
-    let messages = [...this.state.messages, JSON.parse(message.data)];
-    // Update the state of the app component.
-    // Calling setState will trigger a call to render() in App and all child components.
-    this.setState({ messages }, () => {
-      console.log(this.state.messages);
-    });
+    let messageData = JSON.parse(message.data);
+    console.log(messageData);
+    switch (messageData.type) {
+      case 'newMessage':
+        console.log(messageData);
+        console.log(
+          'recieved the following from WebSocketServer:',
+          message.data
+        );
+        let messages = [...this.state.messages, messageData];
+        // Update the state of the app component.
+        // Calling setState will trigger a call to render() in App and all child components.
+        this.setState({ messages }, () => {
+          console.log(this.state.messages);
+        });
+        break;
+      case 'userChanged':
+        console.log(`we're here`);
+        let oldUser = messageData.previousUser;
+        let newUser = messageData.newUser;
+        let userMessages = [
+          ...this.state.messages,
+          { content: `${oldUser} is now ${newUser}` }
+        ];
+        // Update the state of the app component.
+        // Calling setState will trigger a call to render() in App and all child components.
+        this.setState({ messages: userMessages }, () => {
+          console.log(this.state.messages);
+        });
+        break;
+      default:
+        console.log(`invalid message type ${message}`);
+    }
   }
 }
 export default App;
