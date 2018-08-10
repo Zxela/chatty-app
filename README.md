@@ -27,12 +27,12 @@ open http://localhost:3000
 
 ### Multiple Clients
 
-!["Two Clients Connected"](https://github.com/Zxela/tweeter/blob/master/docs/landing.png)
+!["Two Clients Connected"](https://github.com/Zxela/react-simple-boilerplate/blob/master/docs/open.png)
 
 ### Changing Username
 
-!["Change User"](https://github.com/Zxela/tweeter/blob/master/docs/compose.png)
+!["Change User"](https://github.com/Zxela/react-simple-boilerplate/blob/master/docs/userchange.png)
 
 ### Two Clients in Action
 
-!["Both Users Can Send and Recieve"](https://github.com/Zxela/tweeter/blob/master/docs/error.png)
+!["Both Users Can Send and Recieve"](https://github.com/Zxela/react-simple-boilerplate/blob/master/docs/message.png)
