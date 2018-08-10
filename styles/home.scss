@@ -1,7 +1,3 @@
-h1 {
-  color: tomato;
-}
-
 body {
   background: white;
   color: black;
@@ -47,7 +43,6 @@ body {
 .message.system {
   font-style: italic;
   padding: 5px 20px;
-  display: none; //to hide message system
 }
 
 .message-content,
@@ -81,6 +76,18 @@ body {
   color: inherit;
   display: block;
   float: left;
+  font-weight: 700;
+  font-size: 28px;
+  height: 60px;
+  line-height: 60px;
+  padding: 0 10px;
+  text-decoration: none;
+}
+
+.navbar-users-online {
+  color: inherit;
+  display: block;
+  float: right;
   font-weight: 700;
   font-size: 28px;
   height: 60px;

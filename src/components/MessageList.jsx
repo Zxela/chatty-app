@@ -16,13 +16,8 @@ class MessageList extends Component {
         );
       } else {
         return (
-          <div class="notification">
-            <span
-              class="notification-content"
-              style={{ color: 'red', fontSize: '200%' }}
-            >
-              {message.content}
-            </span>
+          <div className="message system notification">
+            <span className="notification-content">{message.content}</span>
           </div>
         );
       }

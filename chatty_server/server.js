@@ -7,6 +7,8 @@ const PORT = 3001;
 
 // Empty array to store messages
 const messages = [];
+// User Colors [blue, red, orange, green]
+const colors = ['#0177FE', '#FE0144', '#FE8801', '#6FFE01'];
 
 // Create a new express server
 const server = express()

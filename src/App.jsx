@@ -38,7 +38,7 @@ class App extends Component {
             }
           };
           if (this.state.previousUser.name !== newUser)
-            this.socket.send(JSON.stringify(userChanged));
+            return this.socket.send(JSON.stringify(userChanged));
         });
       }
     );
@@ -68,8 +68,8 @@ class App extends Component {
           <a href="/" className="navbar-brand">
             Chatty
           </a>
-          <div className="userCount">
-            Number of users logged-in: {this.state.numOfUsers}
+          <div className="navbar-users-online">
+            Users Online: {this.state.numOfUsers}
           </div>
         </nav>
         <MessageList messages={this.state.messages} />
