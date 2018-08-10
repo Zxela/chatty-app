@@ -7,18 +7,13 @@ class ChatBar extends Component {
       currentUserName: this.props.currentUser.name,
       message: ''
     };
-    this.handleKeyPress = this.handleKeyPress.bind(this);
-    this.setMessage = this.setMessage.bind(this);
-    this.callSetUser = this.callSetUser.bind(this);
   }
 
-  callSetUser(event) {
-    this.setState({ currentUserName: event.target.value });
-  }
-  setMessage(event) {
-    this.setState({ message: event.target.value });
-  }
-  handleKeyPress(event) {
+  callSetUser = event => this.setState({ currentUserName: event.target.value });
+
+  setMessage = event => this.setState({ message: event.target.value });
+
+  handleKeyPress = event => {
     if (event.key === 'Enter') {
       event.preventDefault();
       console.log(this.state.message); //log to show message
@@ -26,7 +21,7 @@ class ChatBar extends Component {
       this.props.addMessage(this.state.currentUserName, this.state.message);
       this.setState({ message: '' });
     }
-  }
+  };
 
   render() {
     return (
@@ -44,7 +39,7 @@ class ChatBar extends Component {
             id="chatbar-message"
             name="message"
             className="chatbar-message"
-            placeholder="placeholder"
+            placeholder="This is where your message goes!"
             onChange={this.setMessage}
             value={this.state.message}
           />

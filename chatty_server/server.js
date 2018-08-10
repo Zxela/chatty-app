@@ -5,11 +5,6 @@ const uuidv4 = require('uuid/v4');
 // Set the port to 3001
 const PORT = 3001;
 
-// Empty array to store messages
-const messages = [];
-// User Colors [blue, red, orange, green]
-const colors = ['#0177FE', '#FE0144', '#FE8801', '#6FFE01'];
-
 // Create a new express server
 const server = express()
   // Make the express server serve static assets (html, javascript, css) from the /public folder
@@ -17,19 +12,26 @@ const server = express()
   .listen(PORT, '0.0.0.0', 'localhost', () =>
     console.log(`Listening on ${PORT}`)
   );
-
-// Create the WebSockets server
+// Empty array to store messages
+const messages = [];
+// User Colors [blue, red, orange, green]
+const colors = ['#0177FE', '#FE0144', '#FE8801', '#6FFE01'];
+// Create the WebSockets server & broadcast function
 const wss = new WebSocket.Server({ server });
 wss.broadcast = data => {
   wss.clients.forEach(client => {
     client.readyState === WebSocket.OPEN && client.send(data); //trying out short-circuiting
   });
 };
-// Set up a callback that will run when a client connects to the server
-// When a client connects they are assigned a socket, represented by
-// the ws parameter in the callback.
+
+/* Set up a callback that will run when a client connects to the server
+** When a client connects they are assigned a socket, represented by
+** the ws parameter in the callback.*/
 wss.on('connection', ws => {
   console.log('Client connected');
+
+  ws.color = 'red';
+  // Broadcast on connection
   wss.broadcast(
     JSON.stringify({
       type: 'numUsers',
@@ -51,6 +53,7 @@ wss.on('connection', ws => {
         let incMessage = newData.content;
         incMessage.id = uuidv4();
         incMessage.type = 'newMessage';
+        incMessage.userColor = ws.color;
         messages.push(incMessage);
         wss.broadcast(JSON.stringify(incMessage));
         break;
@@ -72,6 +75,7 @@ wss.on('connection', ws => {
 
   // Set up a callback for when a client closes the socket. This usually means they closed their browser.
   ws.on('close', () => {
+    // Broadcast on Close
     wss.broadcast(
       JSON.stringify({
         type: 'numUsers',
