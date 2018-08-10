@@ -8,9 +8,10 @@ class MessageList extends Component {
   renderMessage = () => {
     return this.props.messages.map((message, index) => {
       if (message.type === 'newMessage') {
+        let userColor = { color: message.userColor };
         return (
           <div className="message" key={index}>
-            <span className="message-username" style={message.color}>
+            <span className="message-username" style={userColor}>
               {message.username}
             </span>
             <span className="message-content">{message.content}</span>

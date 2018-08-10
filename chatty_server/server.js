@@ -29,8 +29,8 @@ wss.broadcast = data => {
 ** the ws parameter in the callback.*/
 wss.on('connection', ws => {
   console.log('Client connected');
-
-  ws.color = 'red';
+  randomNumber = () => Math.floor(Math.random() * colors.length);
+  ws.color = colors[randomNumber()];
   // Broadcast on connection
   wss.broadcast(
     JSON.stringify({
