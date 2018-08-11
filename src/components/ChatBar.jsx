@@ -4,12 +4,12 @@ class ChatBar extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentUserName: this.props.currentUser.name,
+      currentUsername: '',
       message: ''
     };
   }
 
-  callSetUser = event => this.setState({ currentUserName: event.target.value });
+  callSetUser = event => this.setState({ currentUsername: event.target.value });
 
   setMessage = event => this.setState({ message: event.target.value });
 
@@ -17,8 +17,13 @@ class ChatBar extends Component {
     if (event.key === 'Enter') {
       event.preventDefault();
       console.log(this.state.message); //log to show message
-      this.props.setUser(this.state.currentUserName);
-      this.props.addMessage(this.state.currentUserName, this.state.message);
+      //handle no username entered
+      if (this.state.currentUsername) {
+        this.props.setUser(this.state.currentUsername);
+        this.props.addMessage(this.state.currentUsername, this.state.message);
+      } else {
+        this.props.addMessage(this.props.currentUser.name, this.state.message);
+      }
       this.setState({ message: '' });
     }
   };
@@ -32,8 +37,8 @@ class ChatBar extends Component {
             name="username"
             className="chatbar-username"
             onChange={this.callSetUser}
-            value={this.state.currentUserName}
-            placeholder="Username"
+            value={this.state.currentUsername}
+            placeholder="Enter Username (Optional)"
           />
           <input
             id="chatbar-message"
