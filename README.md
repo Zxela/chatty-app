@@ -1,15 +1,17 @@
 # Chatty App
 
-A simple messaging app written in JSX, Javascript, HTML and CSS leveraging WebSocketServer for real-time communication.
+A simple messaging app written in JSX, Javascript, HTML and CSS using WebSocket's for real-time communication.
 
 ### Usage
 
 ```
+git clone https://github.com/Zxela/chatty-app.git chatty
+cd chatty
 npm install
 npm start
 cd chatty_server
 npm install
-npm start
+nodemon server.js
 open http://localhost:3000
 ```
 
@@ -28,7 +30,7 @@ Front-End
 
 Back-End
 
-- Websocket Server ("ws")
+- WebSocketServer ("ws")
 - UUID
 - Express
 - Nodemon
