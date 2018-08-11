@@ -15,13 +15,23 @@ open http://localhost:3000
 
 ### Dependencies
 
-- NodeJS
+- NodeJS 6.0.0+
 - NPM
+
+Front End
+
 - React
+- ReactDOM
 - Webpack
 - [babel-loader](https://github.com/babel/babel-loader)
 - [webpack-dev-server](https://github.com/webpack/webpack-dev-server)
-- WebSocketServer
+
+Back End
+
+- Websocket Server ("ws")
+- UUID
+- Express
+- Nodemon
 
 ## Final Product
 
