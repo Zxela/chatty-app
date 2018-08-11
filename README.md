@@ -1,6 +1,6 @@
 # Chatty App
 
-A simple messaging app written in JSX, Javascript, HTML and CSS using WebSocket's for real-time communication.
+A simple messaging app written in JSX, Javascript, HTML and CSS; using WebSockets for real-time communication.
 
 ### Usage
 
