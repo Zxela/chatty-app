@@ -11,21 +11,18 @@ class App extends Component {
       messages: [],
       numOfUsers: 0
     };
-    this.addMessage = this.addMessage.bind(this);
-    this._handleSocketMessage = this._handleSocketMessage.bind(this);
-    this.setUser = this.setUser.bind(this);
   }
   componentDidMount() {
     // Setup WebSocket Client
-    console.log('componentDidMount <App />');
     this.socket = new WebSocket('ws://localhost:3001');
     // Add Event Listener for Open Connection
     this.socket.addEventListener('open', event => {
       console.log('connection opened with websocket server');
     });
+    // on recieving message from socket server, call this._HandleSocketMessage
     this.socket.onmessage = this._handleSocketMessage;
   }
-  setUser(newUser) {
+  setUser = newUser => {
     this.setState(
       { previousUser: { name: this.state.currentUser.name } },
       () => {
@@ -42,8 +39,8 @@ class App extends Component {
         });
       }
     );
-  }
-  addMessage(username, content) {
+  };
+  addMessage = (username, content) => {
     if (!content) {
       console.log('no content');
     } else {
@@ -58,9 +55,9 @@ class App extends Component {
       };
       this.socket.send(JSON.stringify(newMessage));
     }
-  }
+  };
 
-  // RENDER STARTS HERE
+  // Render Main App Component
   render() {
     return (
       <div>
@@ -81,45 +78,34 @@ class App extends Component {
       </div>
     );
   }
-  // RENDER ENDS HERE
-
-  _handleSocketMessage(message) {
+  // Handle Messages From SocketServer
+  _handleSocketMessage = message => {
     let messageData = JSON.parse(message.data);
-    console.log(messageData);
     switch (messageData.type) {
       case 'newMessage':
-        console.log(messageData);
-        console.log(
-          'recieved the following from WebSocketServer:',
-          message.data
-        );
         let messages = [...this.state.messages, messageData];
         // Update the state of the app component.
-        // Calling setState will trigger a call to render() in App and all child components.
         this.setState({ messages }, () => {
           console.log(this.state.messages);
         });
         break;
       case 'userChanged':
-        console.log(`we're here`);
-        let oldUser = messageData.previousUser;
-        let newUser = messageData.newUser;
         let userMessages = [
           ...this.state.messages,
-          { content: `${oldUser} is now ${newUser}` }
+          {
+            content: `${messageData.previousUser} is now ${messageData.newUser}`
+          }
         ];
-        // Update the state of the app component.
-        // Calling setState will trigger a call to render() in App and all child components.
-        this.setState({ messages: userMessages }, () => {
-          console.log(this.state.messages);
-        });
+        // Update messages to include a system 'userChanged' message
+        this.setState({ messages: userMessages });
         break;
       case 'numUsers':
+        // Update the number of users online
         this.setState({ numOfUsers: messageData.content });
         break;
       default:
         console.log(`invalid message type ${message}`);
     }
-  }
+  };
 }
 export default App;
