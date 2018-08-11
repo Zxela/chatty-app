@@ -18,7 +18,7 @@ open http://localhost:3000
 - NodeJS 6.0.0+
 - NPM
 
-Front End
+Front-End
 
 - React
 - ReactDOM
@@ -26,7 +26,7 @@ Front End
 - [babel-loader](https://github.com/babel/babel-loader)
 - [webpack-dev-server](https://github.com/webpack/webpack-dev-server)
 
-Back End
+Back-End
 
 - Websocket Server ("ws")
 - UUID
