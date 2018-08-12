@@ -17,7 +17,7 @@ open http://localhost:3000
 
 ### Dependencies
 
-- NodeJS 6.0.0+
+- Node.js 6.0.0+
 - NPM
 
 Front-End
