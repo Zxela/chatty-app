@@ -16,8 +16,7 @@ class ChatBar extends Component {
   handleKeyPress = event => {
     if (event.key === 'Enter') {
       event.preventDefault();
-      console.log(this.state.message); //log to show message
-      //handle username entry.
+      //handle username entry
       if (this.state.currentUsername) {
         this.props.setUser(this.state.currentUsername);
         this.props.addMessage(this.state.currentUsername, this.state.message);
